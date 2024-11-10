@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Books {
+  id          String      @id @default(uuid())
+  title       String
+  category    String
+  description String      @db.Text
+  userId      String
+  imageUrl    String
+  rating      Decimal     @db.Decimal
+  user        Users       @relation(fields: [userId], references: [id])
+  whitelist   Whitelist[]
+}
+
+model Users {
+  id              String       @id @default(uuid())
+  name            String
+  email           String       @unique
+  password        String
+  role            String
+  picture         String
+  books           Books[]
+  whitelist       Whitelist[]
+  userClass       UserClass[]  @relation("UserToUserClass") // Relation to UserClass
+  authoredClasses UserClass[]  @relation("Author") // New relation for authored classes
+}
+
+model Whitelist {
+  id           String      @id @default(uuid())
+  name         String
+  bookId       String
+  readerUserId String
+  book         Books       @relation(fields: [bookId], references: [id])
+  reader       Users       @relation(fields: [readerUserId], references: [id])
+  userClass    UserClass[] // Adding this field to establish the inverse relation with UserClass if necessary
+}
+
+model UserClass {
+  id            String      @id @default(uuid())
+  name          String
+  authorUserId  String
+  whitelistId   String
+  author        Users       @relation("Author", fields: [authorUserId], references: [id]) // Match relation name
+  whitelist     Whitelist   @relation(fields: [whitelistId], references: [id])
+  users         Users[]     @relation("UserToUserClass") // The inverse relation for Users
+}

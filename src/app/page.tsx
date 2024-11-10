@@ -1,5 +1,3 @@
-import HomePage from "@/components/pages/HomePage";
-// app/landing/page.js
 export default function LandingPage() {
   return (
     <div className="bg-white text-gray-900">

@@ -1,32 +1,31 @@
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
       });
-
-      if (!response.ok) {
-        throw new Error("Login failed");
+  
+      if (result?.ok) {
+        router.push("/");
+      } else {
+        setError("Login failed. Please check your credentials.");
       }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
-
-      // Redirect or handle successful login
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     }
@@ -75,9 +74,9 @@ export default function LoginPage() {
       </button>
       <p>
         Don't have an account?{" "}
-        <a href="/register" className="text-blue-500 hover:underline">
+        <Link href="/auth/register" className="text-blue-500 hover:underline">
           Sign Up
-        </a>
+        </Link>
       </p>
     </form>
   );

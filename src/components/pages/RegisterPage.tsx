@@ -1,39 +1,40 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import Link from "next/link";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('Reader');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("Reader");
+  const [error, setError] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password, role }),
-      });
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-      // Handle successful registration
+      const data = { name, email, password, role };
+      const response = await axios.post("/api/auth/register", data);
+
+      router.push("/auth/login");
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError("Registration failed. Please try again.");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <div className="text-sm text-red-500">{error}</div>}
-      
+
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700"
+        >
           Name
         </label>
         <input
@@ -47,7 +48,10 @@ export default function RegisterPage() {
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700"
+        >
           Email
         </label>
         <input
@@ -61,7 +65,10 @@ export default function RegisterPage() {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700"
+        >
           Password
         </label>
         <input
@@ -82,7 +89,7 @@ export default function RegisterPage() {
               type="radio"
               name="role"
               value="Reader"
-              checked={role === 'Reader'}
+              checked={role === "Reader"}
               onChange={(e) => setRole(e.target.value)}
               className="text-gray-900 focus:ring-gray-500"
             />
@@ -93,7 +100,7 @@ export default function RegisterPage() {
               type="radio"
               name="role"
               value="Author"
-              checked={role === 'Author'}
+              checked={role === "Author"}
               onChange={(e) => setRole(e.target.value)}
               className="text-gray-900 focus:ring-gray-500"
             />
@@ -109,10 +116,10 @@ export default function RegisterPage() {
         Register
       </button>
       <p>
-        Already have an account?{' '}
-        <a href="/login" className="text-blue-500 hover:underline">
+        Already have an account?{" "}
+        <Link href="/auth/login" className="text-blue-500 hover:underline">
           Login
-        </a>
+        </Link>
       </p>
     </form>
   );

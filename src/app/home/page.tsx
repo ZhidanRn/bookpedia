@@ -1,9 +1,9 @@
 import HomePage from '@/components/pages/HomePage'
 import React from 'react'
 
-export const page = () => {
+export default function Home() {
   return (
-    <div>
+    <div className="max-w-5xl mx-auto">
       <HomePage />
     </div>
   )

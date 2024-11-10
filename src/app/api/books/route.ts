@@ -1,45 +1,25 @@
-// // pages/api/books.ts
-// import { NextApiRequest, NextApiResponse } from 'next';
-// import { PrismaClient } from '@prisma/client';
-
-
-// const prisma = new PrismaClient();
-// export default async function GET( req: NextApiRequest, res: NextApiResponse) {
-//   // Cek apakah metode request adalah GET
-//     try {
-//       // Ambil data dari tabel books
-//     //   const books = await prisma.books.findMany({
-//     //     select: {
-//     //       title: true,
-//     //       category: true,
-//     //       imageUrl: true,
-//     //       description: true,
-//     //       rating: true,
-//     //     },
-//     //   });
-
-//       res.status(200).json("OK");
-//     } catch (error) {
-//       res.status(500).json({ error: 'Failed to fetch books' });
-//     }
-// }
-
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// API Route untuk fetch movies
-export async function GET() {
-    const books = await prisma.books.findMany({
-        select: {
-            title: true,
-            category: true,
-            imageUrl: true,
-            description: true,
-            rating: true,
-        },
-        take: 10
-    });
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const skip = parseInt(searchParams.get('skip') || '0');
+    const take = parseInt(searchParams.get('take') || '10'); // Default to 10 items per load
 
-
-    return NextResponse.json(books);;
+    try {
+        const books = await prisma.books.findMany({
+            select: {
+                title: true,
+                category: true,
+                imageUrl: true,
+                description: true,
+                rating: true,
+            },
+            skip,
+            take,
+        });
+        return NextResponse.json(books);
+    } catch (error) {
+        return NextResponse.error();
+    }
 }

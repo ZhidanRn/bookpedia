@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function LandingPage() {
   return (
     <div className="bg-white text-gray-900">
@@ -10,7 +12,7 @@ export default function LandingPage() {
           </p>
           <div className="text-center mt-4">
             <a
-              href="/login"
+              href="/auth/login"
               className="bg-gray-900 text-white py-2 px-6 rounded-full hover:bg-gray-700 transition duration-200"
             >
               Get Started
@@ -68,12 +70,12 @@ export default function LandingPage() {
             Sign up today and start your journey with BookPedia, your go-to platform for managing and enjoying books.
           </p>
           <div className="mt-8">
-            <a
-              href="/register"
+            <Link
+              href="/auth/register"
               className="bg-yellow-500 text-gray-900 py-3 px-8 rounded-full hover:bg-yellow-400 transition duration-200"
             >
               Sign Up Now
-            </a>
+            </Link>
           </div>
         </div>
       </section>

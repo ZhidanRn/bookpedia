@@ -12,9 +12,13 @@
     "@prisma/client": "^5.22.0",
     "@supabase/supabase-js": "^2.46.1",
     "axios": "^1.7.7",
+<<<<<<< HEAD
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.11",
+=======
+    "bcryptjs": "^2.4.3",
+>>>>>>> d92a4569f95968256e81c88b2933efd8836903dc
     "next": "15.0.3",
     "next-auth": "^5.0.0-beta.25",
     "prisma": "^5.22.0",
@@ -24,6 +28,10 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+<<<<<<< HEAD
+=======
+    "@types/bcryptjs": "^2.4.6",
+>>>>>>> d92a4569f95968256e81c88b2933efd8836903dc
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
